@@ -4,13 +4,21 @@ This program reads a JSONL file line by line, takes a number from one field of e
 
 ## How to build and run the code
 
-You need Go 1.27. On macOS you can install it with Homebrew:
-
+You need Go 1.27. On macOS you can install it with following command:
 ```sh
 make setup
 ```
 
+wich is just the shortcut for Brew call:
+
+```sh
+brew install go@1.27
+```
+
 After that, add Go to your `PATH` as the command output says.
+```
+export PATH="$$(brew --prefix go@1.27)/bin:$$PATH"
+```
 
 Main commands:
 
@@ -37,7 +45,7 @@ Command line arguments:
 * `-f` is the name of the JSON field with the numbers, case sensitive. Required.
 * `-v` turns on verbose output. In this mode the program also prints the arguments at the start and line statistics at the end. Off by default.
 
-After start, the program asks for the path to the input file. Type the path and press Enter. You can also send the absolute path through a pipe:
+After start, the program asks for the absolute path to the input file. Type the absolute path and press Enter. You can also send the absolute path through a pipe:
 
 ```sh
 echo /demo.jsonl | ./quantile -q 0.75 -f latency_ms
