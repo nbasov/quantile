@@ -13,6 +13,24 @@ const (
 	ErrMessageMissingField = "Missing field"
 )
 
+func parseChan(lineCh chan []byte, parser *JSONFieldNumericValueParser) chan ChannelValue {
+	resCh := make(chan ChannelValue)
+
+	go func() {
+		for line := range lineCh {
+			val, errMessage := parser.Parse(line)
+			resCh <- ChannelValue{
+				Value:        val,
+				ErrorMessage: errMessage,
+			}
+		}
+
+		close(resCh)
+	}()
+
+	return resCh
+}
+
 // JSONFieldNumericValueParser is a parser that extracts a numeric value from a specified field in a JSON object.
 type JSONFieldNumericValueParser struct {
 	Stat Statistics
@@ -27,26 +45,6 @@ func NewJSONFieldNumericValueParser(fieldName string) JSONFieldNumericValueParse
 		fieldName: fieldName,
 		fieldsMap: make(map[string]json.RawMessage),
 	}
-}
-
-// ParseChan reads lines from the input channel, parses each line to extract the numeric value from the specified
-// JSON field, and sends the results to the output channel.
-func (p *JSONFieldNumericValueParser) ParseChan(lineCh chan []byte) chan ChannelValue {
-	resCh := make(chan ChannelValue)
-
-	go func() {
-		for line := range lineCh {
-			val, errMessage := p.Parse(line)
-			resCh <- ChannelValue{
-				Value:        val,
-				ErrorMessage: errMessage,
-			}
-		}
-
-		close(resCh)
-	}()
-
-	return resCh
 }
 
 // Parse parses a single line of JSON, extracting the numeric value from the specified field.

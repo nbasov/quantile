@@ -4,8 +4,7 @@ import "container/heap"
 
 // Exact quantile by Two Heaps algorithm with linear interpolation
 //
-
-// Basic description coulf be found here:
+// Basic description could be found here:
 // https://preparekaro.com/two-heap-approach.html
 //
 // Time: O(n log n) for adding n values and O(1) for computing the quantile.
@@ -26,6 +25,7 @@ func NewQuantileTwoHeaps(p float32) QuantileTwoHeaps {
 	}
 }
 
+// Push adds a new value to the quantile computation.
 func (q *QuantileTwoHeaps) Push(val float32) {
 	// Choosing target heap
 	if q.left.Len() == 0 || val <= q.left[0] {
@@ -48,6 +48,7 @@ func (q *QuantileTwoHeaps) Push(val float32) {
 	}
 }
 
+// Value returns the current quantile value.
 func (q *QuantileTwoHeaps) Value() float32 {
 	// Edge cases
 	if q.left.Len()+q.right.Len() == 0 {
@@ -60,7 +61,7 @@ func (q *QuantileTwoHeaps) Value() float32 {
 		return q.right[0]
 	}
 
-	// Interpolation
+	// Linear interpolation
 	totalN := q.left.Len() + q.right.Len()
 	pos := q.p * float32(totalN-1)
 	lowerIdx := int(pos)
@@ -69,11 +70,13 @@ func (q *QuantileTwoHeaps) Value() float32 {
 	return q.left[0] + fraction*(q.right[0]-q.left[0])
 }
 
+// PushAndValue adds a new value and returns the current quantile value.
 func (q *QuantileTwoHeaps) PushAndValue(value float32) float32 {
 	q.Push(value)
 	return q.Value()
 }
 
+// MinHeap is a min-heap implementation for container/heap.
 type MinHeap []float32
 
 func (h MinHeap) Len() int           { return len(h) }
@@ -92,6 +95,7 @@ func (h *MinHeap) Pop() any {
 	return x
 }
 
+// MaxHeap is a max-heap implementation for container/heap.
 type MaxHeap []float32
 
 func (h MaxHeap) Len() int           { return len(h) }

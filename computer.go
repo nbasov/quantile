@@ -1,6 +1,7 @@
 package main
 
-// Computer is an interface that defines methods for adding values and computing a result based on those values.
+// Computer is an interface for quantile computation algorithms
+// It defines methods for adding values and computing a result based on those values.
 type Computer interface {
 	Push(float32)
 	Value() float32

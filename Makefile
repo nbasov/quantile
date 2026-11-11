@@ -30,7 +30,7 @@ $(LOAD_FILE):
 load-gen: $(LOAD_FILE)
 
 load-run: build $(LOAD_FILE)
-	echo $(LOAD_FILE) | /usr/bin/time -l ./$(BIN) -q 0.75 -f latency_ms -v
+	echo $(LOAD_FILE) | /usr/bin/time -l ./$(BIN) -q 0.75 -f bytes_sent -v
 
 clean:
 	rm -f $(BIN) $(LOAD_FILE)

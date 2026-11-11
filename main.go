@@ -21,12 +21,11 @@ func main() {
 	}
 
 	parser := NewJSONFieldNumericValueParser(fieldName)
-	//computer := NewQuantileSimple(p)
 	computer := NewQuantileTwoHeaps(p)
 
 	// Pipeline definition
 	linesCh := readLinesChan(filePath)
-	valueCh := parser.ParseChan(linesCh)
+	valueCh := parseChan(linesCh, &parser)
 	quantileCh := computeChan(valueCh, &computer)
 
 	// Results printing
